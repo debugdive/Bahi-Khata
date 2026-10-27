@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const customerController_1 = require("../controllers/customerController");
+const authMiddleware_1 = __importDefault(require("../middleware/authMiddleware"));
+const roleMiddleware_1 = __importDefault(require("../middleware/roleMiddleware"));
+const router = express_1.default.Router();
+router.use(authMiddleware_1.default);
+router.use((0, roleMiddleware_1.default)('Customer'));
+router.get('/dashboard', customerController_1.getCustomerDashboard);
+router.get('/bills/:businessId', customerController_1.getCustomerBills);
+router.get('/subscriptions', customerController_1.getCustomerSubscriptions);
+router.post('/subscriptions/:id/pause', customerController_1.pauseSubscription);
+router.post('/subscriptions/:id/extra', customerController_1.requestExtra);
+router.get('/payments', customerController_1.getCustomerPayments);
+router.post('/pay-all', customerController_1.payAll);
+exports.default = router;
